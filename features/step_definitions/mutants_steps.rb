@@ -81,3 +81,7 @@ end
 Given(/^I don't have an ability$/) do
   @mutant.ability = nil
 end
+
+When(/^I enroll the mutant$/) do
+  @mutant.enroll(@tem)
+end

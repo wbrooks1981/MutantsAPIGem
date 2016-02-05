@@ -13,7 +13,7 @@ module MutantsAPIGem
         def retrieve(term = nil)
           @payload = nil
           @route = "#{end_point}"
-          @route += term.id unless term.nil?
+          @route += term.id.to_s unless term.nil?
           @response = HTTParty.get(@route)
         end
 

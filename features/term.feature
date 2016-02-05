@@ -13,12 +13,12 @@ Feature: Terms
     When I create the term
     Then the term will be created
 
-  Scenario: Able to retrieve a mutant
+  Scenario: Able to retrieve a term
     Given I have a term
     When I retrieve the term
     Then the term will be returned
 
-  Scenario: Able to update a mutant
+  Scenario: Able to update a term
     Given  I have a term
     And A term ends "2016-06-04"
     When I update the term
@@ -29,21 +29,22 @@ Feature: Terms
     When I delete the term
     Then the term will be deleted
 
-  Scenario: Verify response on missing start date
+  Scenario: Verify response on missing term start date
     Given I don't have a term start date
     And I create the term
     Then the term will not be created
     And the error with "begins_at" of "can't be blank"
 
-  Scenario: Verify response on missing end date
+  Scenario: Verify response on missing term end date
     Given I don't have a term end date
     And I create the term
     Then the term will not be created
     And the error with "ends_at" of "can't be blank"
 
-  Scenario: Verify response on end date before start
-    Given A term starts "2016-03-01"
-    And A term ends "2016-02-01"
-    And I create the mutant
-    Then the mutant will not be created
+    #defect
+  Scenario: Verify response on term end date before start
+    Given A term starts "2016-03-15"
+    And A term ends "2016-02-10"
+    And I create the term
+    Then the term will not be created
     And the error with "ends_at" of "can't be before begins at"

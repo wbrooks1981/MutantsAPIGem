@@ -60,7 +60,7 @@ Given(/^I don't have a term start date$/) do
 end
 
 Then(/^the term will not be created$/) do
-  raise "Term was created when it should have not been" if @response.code == 201
+  raise "Term was created when it should have not been" unless @term.id.nil?
 end
 
 Given(/^I don't have a term end date$/) do

@@ -49,3 +49,22 @@ Feature: Mutants
     And the error with "power" of "can't be blank"
 
     # TODO: Eligible end date must be after Eligible Start
+
+    # TODO: Debug this method
+  Scenario: Able to Enroll in a term
+    Given A term starts "2016-02-04"
+    And A term ends "2016-04-04"
+    And I have a term
+    And I have a mutant
+    When I enroll the mutant
+    Then the enrollment will be created
+
+  Scenario: Able to retrieve all enrollments for a mutant
+    Given I have an enrollment
+    When I retrieve all the enrollments for the mutant
+    Then the enrollments will be returned
+
+  Scenario: Able to retrieve a specific enrollment for a mutant
+    Given I have an enrollment
+    When I retrieve the enrollment for the mutant
+    Then the enrollment will be returned
