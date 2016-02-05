@@ -7,27 +7,29 @@ module MutantsAPIGem
 
         def create(mutant)
           @payload  = mutant.to_json
-          @route    = "https://mutant-school.herokuapp.com/api/v1/mutants"
+          @route    = "#{end_point}"
           @response = HTTParty.post(@route, :body => @payload, :headers => { "Content-Type" => "application/json" })
         end
 
         def retrieve(mutant = nil)
-          @payload  = nil
-          @route    = "https://mutant-school.herokuapp.com/api/v1/mutants/"
+          @route    = "#{end_point}"
           @route    += mutant.id.to_s unless mutant.nil?
           @response = HTTParty.get(@route)
         end
 
         def update(mutant)
           @payload = mutant.to_json
-          @route   = "https://mutant-school.herokuapp.com/api/v1/mutants/#{mutant.id}"
+          @route   = "#{end_point}#{mutant.id}"
           @response = HTTParty.put(@route, :body => @payload, :headers => { "Content-Type" => "application/json" })
         end
 
         def delete(mutant)
-          @payload  = nil
-          @route    = "https://mutant-school.herokuapp.com/api/v1/mutants/#{mutant.id}"
+          @route    = "#{end_point}#{mutant.id}"
           @response = HTTParty.delete(@route)
+        end
+
+        def end_point
+          "https://mutant-school.herokuapp.com/api/v1/mutants/"
         end
       end
     end

@@ -33,8 +33,6 @@ Then(/^the mutant will be created$/) do
 end
 
 Given(/^I have a mutant$/) do
-  mutant = { :name => "Victor", :alias => "Colossus", :ability => "Metal Man"}
-  @mutant = MutantsAPIGem::Mutant.new(mutant)
   @mutant.create
   raise "Mutant wasn't created" if @mutant.id.nil?
 end
@@ -48,7 +46,7 @@ Then(/^the mutant will be deleted$/) do
 end
 
 Then(/^the mutant will be returned$/) do
-  raise "Mutant wasn't deleted" unless @mutant.id == @response["id"]
+  raise "Mutant wasn't returned" unless @mutant.id == @response["id"]
 end
 
 When(/^I retrieve the mutant$/) do
