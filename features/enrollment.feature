@@ -1,79 +1,66 @@
 Feature: Enrollment
   As a user I want to work with the enrollment api
 
-  Background:
-    Given an alias of "Cyclops"
-    And a name of "Scott Summers"
-    And an ability of "Beams of energy from eyes"
-    Given A term starts "2016-02-04"
-    And A term ends "2016-04-04"
-    Given I have a mutant
+  Scenario: Able to Enroll in a term
     And I have a term
-
-  Scenario: Able to enroll mutant for a term
-    When A mutant enrolls in a term
+    And I have a mutant
+    When I enroll the mutant in the term
     Then the enrollment will be created
 
-  Scenario: Able to add a mutant to a term
-    When A mutant is added to a term
-    Then the term will have the mutant
-
   Scenario: Able to retrieve all enrollments for a mutant
-    Given A mutant is enrolled in a term
-    When I retrieve all enrollments for a mutant
+    Given I have mutant enrolled in a term
+    When I retrieve all the enrollments for the mutant
     Then the enrollments will be returned
 
   Scenario: Able to retrieve a specific enrollment for a mutant
-    Given A mutant is enrolled in a term
-    When I retrieve the enrollment
-    Then enrollment will be returned
+    Given I have mutant enrolled in a term
+    When I retrieve the enrollment for the mutant
+    Then the enrollment will be returned
+
+  Scenario: Verify response on enrolling in a term already started
+    Given A term already started
+    And I have a term
+    And I have a mutant
+    When I enroll the mutant in the term
+    Then the enrollment will not be created
+    And the error with "student" of "is not eligible for that term"
+
+  Scenario: Verify response on enrolling in a term already ended
+    Given A term already ended
+    And I have a term
+    And I have a mutant
+    When I enroll the mutant in the term
+    Then the enrollment will not be created
+    And the error with "student" of "is not eligible for that term"
+
+  Scenario: Able to add mutant to term
+    And I have a term
+    And I have a mutant
+    When I add a mutant to the term
+    Then the enrollment will be created
 
   Scenario: Able to retrieve all enrollments for a term
-    Given A mutant is enrolled in a term
-    When I retrieve all enrollments for a term
+    Given I have term with an enrolled mutant
+    When I retrieve all the enrollments for the term
     Then the enrollments will be returned
 
   Scenario: Able to retrieve a specific enrollment for a term
-    Given A mutant is enrolled in a term
-    When I retrieve the enrollment
-    Then enrollment will be returned
+    Given I have term with an enrolled mutant
+    When I retrieve the enrollment for the term
+    Then the enrollment will be returned
 
-  Scenario: Able to create a term
-    When I create the term
-    Then the term will be created
+  Scenario: Verify response on adding mutant to term already started
+    Given A term already started
+    And I have a term
+    And I have a mutant
+    When I add a mutant to the term
+    Then the enrollment will not be created
+    And the error with "student" of "is not eligible for that term"
 
-  Scenario: Able to retrieve a term
-    Given I have a term
-    When I retrieve the term
-    Then the term will be returned
-
-  Scenario: Able to update a term
-    Given  I have a term
-    And A term ends "2016-06-04"
-    When I update the term
-    Then the term will be updated
-
-  Scenario: Able to delete a term
-    Given  I have a term
-    When I delete the term
-    Then the term will be deleted
-
-  Scenario: Verify response on missing term start date
-    Given I don't have a term start date
-    And I create the term
-    Then the term will not be created
-    And the error with "begins_at" of "can't be blank"
-
-  Scenario: Verify response on missing term end date
-    Given I don't have a term end date
-    And I create the term
-    Then the term will not be created
-    And the error with "ends_at" of "can't be blank"
-
-    #defect
-  Scenario: Verify response on term end date before start
-    Given A term starts "2016-03-15"
-    And A term ends "2016-02-10"
-    And I create the term
-    Then the term will not be created
-    And the error with "ends_at" of "can't be before begins at"
+  Scenario: Verify response on adding mutant to a term already ended
+    Given A term already ended
+    And I have a term
+    And I have a mutant
+    When I add a mutant to the term
+    Then the enrollment will not be created
+    And the error with "student" of "is not eligible for that term"

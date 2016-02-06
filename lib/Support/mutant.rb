@@ -1,14 +1,15 @@
 module MutantsAPIGem
   class Mutant
     attr_accessor :id, :alias, :name, :ability, :eligibility_begin_date, :eligibility_end_date, :advise_begin_date
-    attr_reader :create_date, :modified_date, :enrollments
+    attr_reader :create_date, :modified_date
 
     def initialize(options = {})
       @id      = nil
-      @enrollments = []
       @name    = options[:name]
       @alias   = options[:alias]
       @ability = options[:ability]
+      @eligibility_begin_date = options[:eligibility_begin_date]
+      @eligibility_end_date = options[:eligibility_end_date]
     end
 
     def create
@@ -35,16 +36,19 @@ module MutantsAPIGem
 
     def enroll(term)
       enrollment = MutantsAPIGem::Enrollment.new(self, term)
-      enrollment.create
+      response = MutantsAPIGem::Routes::Mutants.enroll(enrollment)
+      return enrollment unless response.code == 201
+      enrollment.update_from_response(response)
+      enrollment
     end
 
-    def enrollment_withdraw(enrollment)
-      MutantsAPIGem::Routes::Enrollments.delete_for_mutant(self, enrollment)
+    def withdraw(enrollment)
+      MutantsAPIGem::Routes::Mutants.withdraw(enrollment)
 
     end
 
-    def retrieve_enrollments(enrollment = nil)
-      MutantsAPIGem::Routes::Enrollments.retrieve(self, enrollment)
+    def enrollments(enrollment = nil)
+      MutantsAPIGem::Routes::Mutants.enrollments(self, enrollment)
     end
 
     def to_json

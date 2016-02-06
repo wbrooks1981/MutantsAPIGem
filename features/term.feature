@@ -1,10 +1,6 @@
 Feature: Terms
   As a user I want to work with the terms api
 
-  Background:
-    Given A term starts "2016-02-04"
-    And A term ends "2016-04-04"
-
   Scenario: Able to retrieve all terms
     When I retrieve all terms
     Then a list of terms will be returned
@@ -40,11 +36,11 @@ Feature: Terms
     And I create the term
     Then the term will not be created
     And the error with "ends_at" of "can't be blank"
-
-    #defect
+        #defect
   Scenario: Verify response on term end date before start
     Given A term starts "2016-03-15"
     And A term ends "2016-02-10"
     And I create the term
     Then the term will not be created
     And the error with "ends_at" of "can't be before begins at"
+

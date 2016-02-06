@@ -28,6 +28,23 @@ module MutantsAPIGem
           @response = HTTParty.delete(@route)
         end
 
+        def enroll(enrollment)
+          @route    = "#{end_point}#{enrollment.mutant.id}/enrollments"
+          @payload = { :enrollment => { :term_id => enrollment.term.id }}.to_json
+          @response = HTTParty.post(@route, :body => @payload, :headers => { "Content-Type" => "application/json" })
+        end
+
+        def withdraw(enrollment)
+          @route    = "#{end_point}#{enrollment.mutant.id}/enrollments/#{enrollment.id}"
+          @response = HTTParty.delete(@route)
+        end
+
+        def enrollments(mutant, enrollment = nil)
+          @route    = "#{end_point}#{mutant.id}/enrollments/"
+          @route += enrollment.id.to_s unless enrollment.nil?
+          @response = HTTParty.get(@route)
+        end
+
         def end_point
           "https://mutant-school.herokuapp.com/api/v1/mutants/"
         end

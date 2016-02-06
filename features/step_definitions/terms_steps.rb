@@ -1,5 +1,8 @@
+require "MutantsAPIGem"
+
 Before do
-  @term = MutantsAPIGem::Term.new
+  @term = MutantsAPIGem::Term.new({:start_date => Date.today + 5,
+                                   :end_date   => Date.today + 90})
 end
 
 When(/^I retrieve all terms$/) do
@@ -65,4 +68,32 @@ end
 
 Given(/^I don't have a term end date$/) do
   @term.end_date = nil
+end
+
+When(/^I add a mutant to the term$/) do
+  @enrollment = @term.enroll(@mutant)
+  @response = MutantsAPIGem::Routes::Terms.response if @enrollment.id.nil?
+end
+
+Given(/^A term already started$/) do
+  @term.start_date = Date.today - 1
+end
+
+Given(/^A term already ended$/) do
+  @term.start_date = Date.today - 10
+  @term.end_date = Date.today - 5
+end
+
+When(/^I retrieve all the enrollments for the term$/) do
+  @response = @term.enrollments
+end
+
+When(/^I retrieve the enrollment for the term$/) do
+  @response = @term.enrollments(@enrollment)
+end
+
+Given(/^I have term with an enrolled mutant$/) do
+  @term.create
+  @mutant.create
+  @enrollment = @term.enroll(@mutant)
 end
