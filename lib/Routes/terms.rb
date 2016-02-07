@@ -11,16 +11,19 @@ module MutantsAPIGem
         end
 
         def retrieve(term = nil)
+          puts "Retrieving Terms" if term.nil?
           @payload = nil
           @route = "#{end_point}"
           @route += term.id.to_s unless term.nil?
           @response = HTTParty.get(@route)
+          puts "Retrieved Terms" if term.nil? && @response.code == 200
+          @response
         end
 
         def update(term)
           @payload = term.to_json
           @route = "#{end_point}#{term.id}"
-          @response = HTTParty.put(@route)
+          @response = HTTParty.put(@route,:body => @payload, :headers => {"Content-Type" => "application/json" } )
         end
 
         def delete(term)
@@ -41,9 +44,12 @@ module MutantsAPIGem
         end
 
         def enrollments(term, enrollment = nil)
+          puts "Retrieving Enrollments" if enrollment.nil?
           @route    = "#{end_point}#{term.id}/enrollments/"
           @route += enrollment.id.to_s unless enrollment.nil?
           @response = HTTParty.get(@route)
+          puts "Retrieved Enrollments" if enrollment.nil? && @response.code == 200
+          @response
         end
 
         private
