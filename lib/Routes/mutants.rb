@@ -4,9 +4,8 @@ module MutantsAPIGem
     module Mutants
       class << self
         attr_accessor :payload, :route, :response
-
         def create(mutant)
-          @payload  = mutant.to_json
+          @payload  = mutant.to_h.to_json
           @route    = "#{end_point}"
           @response = HTTParty.post(@route, :body => @payload, :headers => { "Content-Type" => "application/json" })
         end
@@ -21,7 +20,7 @@ module MutantsAPIGem
         end
 
         def update(mutant)
-          @payload = mutant.to_json
+          @payload = mutant.to_h.to_json
           @route   = "#{end_point}#{mutant.id}"
           @response = HTTParty.put(@route, :body => @payload, :headers => { "Content-Type" => "application/json" })
         end
@@ -33,7 +32,7 @@ module MutantsAPIGem
 
         def enroll(enrollment)
           @route    = "#{end_point}#{enrollment.mutant.id}/enrollments"
-          @payload = { :enrollment => { :term_id => enrollment.term.id }}.to_json
+          @payload = enrollment.to_mutant_hash.to_json
           @response = HTTParty.post(@route, :body => @payload, :headers => { "Content-Type" => "application/json" })
         end
 
@@ -53,7 +52,7 @@ module MutantsAPIGem
 
         def advise(advisor, student)
           @route    = "#{end_point}#{advisor.id}/advisees"
-          @payload = { :advisee => { :id => student.id }}.to_json
+          @payload =  advisor.to_advisor(student).to_json
           @response = HTTParty.post(@route, :body => @payload, :headers => { "Content-Type" => "application/json" })
         end
 
@@ -66,6 +65,8 @@ module MutantsAPIGem
           @route    = "#{end_point}#{advisor.id}/advisees/"
           @response = HTTParty.get(@route)
         end
+
+        private
 
         def end_point
           "https://mutant-school.herokuapp.com/api/v1/mutants/"

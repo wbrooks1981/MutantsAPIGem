@@ -1,7 +1,7 @@
 module MutantsAPIGem
   class Mutant
-    attr_accessor :id, :alias, :name, :ability, :eligibility_begin_date, :eligibility_end_date, :advise_begin_date
-    attr_reader :create_date, :modified_date, :enrolls
+    attr_accessor :alias, :name, :ability, :eligibility_begin_date, :eligibility_end_date, :advise_begin_date
+    attr_reader :id, :create_date, :modified_date, :enrolls
 
     def initialize(options = {})
       @id      = nil
@@ -87,7 +87,11 @@ module MutantsAPIGem
     end
 
     def advisees
-      MutantsAPIGem::Routes::Mutants.advisees(self)
+      puts "Retrieving Students: All students of advisor #{@alias}"
+      response = MutantsAPIGem::Routes::Mutants.advisees(self)
+      return response unless response.code == 200
+      puts "Retrieved Students: All students of advisor #{@alias}"
+      response
     end
 
     def remove_advisee(student)
@@ -96,10 +100,6 @@ module MutantsAPIGem
       return response unless response.code == 200
       puts "Removed Advisor: #{@alias} as an advisor to #{student.alias}"
       response
-    end
-
-    def to_json
-      to_h.to_json
     end
 
     def to_h
@@ -111,6 +111,10 @@ module MutantsAPIGem
         :eligibility_ends_at     => @eligibility_end_date,
         :may_advise_beginning_at => @advise_begin_date
       }
+    end
+
+    def to_advisor(student)
+      { :advisee => { :id => student.id }}
     end
   end
 end

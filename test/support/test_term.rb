@@ -6,11 +6,9 @@ describe MutantsAPIGem::Term do
     @term = MutantsAPIGem::Term.new(term)
   end
 
-  it 'should have correct start for payload' do
-    @term.to_h[:begins_at].must_equal Date.today + 5
-  end
-
-  it 'should have correct end for payload' do
-    @term.to_h[:ends_at].must_equal Date.today + 90
+  it 'should have the expected payload' do
+    payload = @term.to_h
+    payload[:begins_at].must_equal Date.today + 5
+    payload[:ends_at].must_equal Date.today + 90
   end
 end

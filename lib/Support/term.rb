@@ -1,10 +1,12 @@
 module MutantsAPIGem
   class Term
-    attr_accessor :id, :start_date, :end_date
-    attr_reader :create_date, :modified_date, :enrolls
+    attr_accessor :start_date, :end_date
+    attr_reader :id, :created_date, :modified_date, :enrolls
 
     def initialize(options = {})
       @id = nil
+      @created_date = nil
+      @modified_date = nil
       @enrolls = []
       @start_date = options[:start_date]
       @end_date = options[:end_date]
@@ -58,15 +60,20 @@ module MutantsAPIGem
     end
 
     def withdraw(enrollment)
-      MutantsAPIGem::Routes::Terms.withdraw(enrollment)
+      puts "Term removing Mutant: Term staring #{@start_date} removes #{mutant.alias}"
+      response = MutantsAPIGem::Routes::Terms.withdraw(enrollment)
+      return response unless response.code == 204
+      @enrolls.delete(enrollment)
+      puts "Term Added Mutant: Term staring #{@start_date} adds #{mutant.alias}"
+      response
     end
 
     def enrollments(enrollment = nil)
-      MutantsAPIGem::Routes::Terms.enrollments(self, enrollment)
-    end
-
-    def to_json
-      to_h.to_json
+      puts "Retrieving Term Enrollment: Enrollment #{enrollment.id} in term #{@id}" unless enrollment.nil?
+      response = MutantsAPIGem::Routes::Terms.enrollments(self, enrollment)
+      return response unless response.code == 200
+      puts "Retrieved Term Enrollment: Enrollment #{enrollment.id} in term #{@id}" unless enrollment.nil?
+      response
     end
 
     def to_h
