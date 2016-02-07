@@ -5,7 +5,7 @@ module MutantsAPIGem
       class << self
         attr_accessor :payload, :route, :response
         def create(term)
-          @payload = term.to_json
+          @payload = term.to_h.to_json
           @route = "#{end_point}"
           @response = HTTParty.post(@route,:body => @payload, :headers => {"Content-Type" => "application/json" } )
         end
@@ -21,7 +21,7 @@ module MutantsAPIGem
         end
 
         def update(term)
-          @payload = term.to_json
+          @payload = term.to_h.to_json
           @route = "#{end_point}#{term.id}"
           @response = HTTParty.put(@route,:body => @payload, :headers => {"Content-Type" => "application/json" } )
         end

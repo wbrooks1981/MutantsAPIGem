@@ -32,7 +32,7 @@ module MutantsAPIGem
 
         def enroll(enrollment)
           @route    = "#{end_point}#{enrollment.mutant.id}/enrollments"
-          @payload = enrollment.to_mutant_hash.to_json
+          @payload = enrollment.to_term.to_json
           @response = HTTParty.post(@route, :body => @payload, :headers => { "Content-Type" => "application/json" })
         end
 
