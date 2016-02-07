@@ -1,7 +1,7 @@
 module MutantsAPIGem
   class Mutant
     attr_accessor :alias, :name, :ability, :eligibility_begin_date, :eligibility_end_date, :advise_begin_date
-    attr_reader :id, :create_date, :modified_date, :enrolls
+    attr_reader :id, :created_date, :modified_date, :enrolls
 
     def initialize(options = {})
       @id      = nil
@@ -19,7 +19,7 @@ module MutantsAPIGem
       response = MutantsAPIGem::Routes::Mutants.create(self)
       return response unless response.code == 201
       @id = response["id"] unless response.nil?
-      @create_date = response["created_at"]
+      @created_date = response["created_at"]
       @modified_date = response["updated_at"]
       MutantsAPIGem.mutants.push(self)
       puts "Created Mutant: #{@alias}"

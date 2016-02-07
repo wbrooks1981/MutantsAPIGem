@@ -1,7 +1,7 @@
 module MutantsAPIGem
   class Enrollment
     attr_accessor :mutant, :term
-    attr_reader :id, :create_date, :modified_date
+    attr_reader :id, :created_date, :modified_date
 
     def initialize(mutant, term)
       @id      = nil
@@ -11,7 +11,7 @@ module MutantsAPIGem
 
     def update_from_response(response)
       @id = response["id"]
-      @create_date = response["created_at"]
+      @created_date = response["created_at"]
       @modified_date = response["updated_at"]
     end
 
